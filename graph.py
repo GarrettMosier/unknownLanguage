@@ -5,12 +5,14 @@ class Graph:
         
     # Find all immediate descendents for a given node    
     def getNeighbors(self, c):
-        return [value for (key, value) in self.mappings if c == key]
+        return {value for (key, value) in self.mappings if c == key}
 
 
     # Find out how main pointers there are to the given node
     def getCountOfToValue(self):
-        return {key:len([pair for pair in self.mappings if pair[1] == value]) for (key, value) in self.mappings}
+        #print(set(self.mappings))
+        # TODO Only returning a set of size 1. No idea why. 
+        return {key:len({k for (k,v) in self.mappings if v == value}) for (key, value) in self.mappings}
 
     
     # Taken from a topographical search algorithm
@@ -19,7 +21,7 @@ class Graph:
         result = []
 
         countOfValue = self.getCountOfToValue()
-        print(countOfValue['a'])
+        print(countOfValue)
         for c in charSet:
             if c not in countOfValue or countOfValue[c] == 0:
                 miniQueue = [c] + miniQueue
@@ -39,7 +41,7 @@ class Graph:
 # Graph factory method converting ordered list of words into a DAG
 def createWordOrdering(words):
     wordPairs = zipTail(words)
-    return Graph(set(filter(lambda x: x and x != (None, None), [createOrderingRule(pair[0], pair[1]) for pair in wordPairs])))
+    return Graph(filter(lambda x: x and x != (None, None), {createOrderingRule(pair[0], pair[1]) for pair in wordPairs}))
 
 
 # Requires at least two elements
