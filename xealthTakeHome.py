@@ -15,18 +15,36 @@ def createOrderingRule(wordOne, wordTwo):
     for (a, b) in zip(wordOne, wordTwo):
         if a != b:
             return (a, b)
+    return None
+    #print(a)
+    #print(b)
 
         
 # Creates the global ordering for all characters
+# End result should be a directed acyclic graph (DAG)
 def createWordOrdering(words):
     wordPairs = zipTail(words)
     # TODO remove duplicate checks for if value is None
     return filter(lambda x: x, set([createOrderingRule(a,b) for (a,b) in wordPairs if (a, b) and a.isalpha() and b.isalpha()]))
 
 
+wordIsAlpha = lambda x: all([c.isalpha() for c in x])
+
+
+# Taken from a topographical search algorithm
+def wordOrderingToTotalOrder(wordOrdering, start):
+    queue = [start]
+
+    while len(queue) > 0:
+        currentChar = queue.pop(0)
+        
+
 def main():
     f = open("data.txt", "r")
-    testValues = [x.lower() for x in f.read().split("\n")]
+    testValues = [x.lower() for x in f.read().split("\n") if wordIsAlpha(x)]
+    charactersInLanguage = set("".join(testValues))
+    print(charactersInLanguage)
+    print(len(charactersInLanguage))
     # TODO Ignore case
     #print(testValues)
     print(list(createWordOrdering(testValues)))
