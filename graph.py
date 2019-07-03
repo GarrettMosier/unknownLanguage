@@ -1,6 +1,6 @@
 class Graph:
     def __init__(self, mappings):
-        self.mappings = mappings
+        self.mappings = set(mappings)
 
         
     # Find all immediate descendents for a given node    
@@ -10,9 +10,10 @@ class Graph:
 
     # Find out how main pointers there are to the given node
     def getCountOfToValue(self):
-        #print(set(self.mappings))
-        # TODO Only returning a set of size 1. No idea why. 
-        return {key:len({k for (k,v) in self.mappings if v == value}) for (key, value) in self.mappings}
+        # TODO Only returning a set of size 1. No idea why. Fucking filter type!
+
+        valueMap = {value : len({k for (k, v) in self.mappings if v == value}) for (key, value) in self.mappings}
+        return valueMap
 
     
     # Taken from a topographical search algorithm
@@ -21,7 +22,7 @@ class Graph:
         result = []
 
         countOfValue = self.getCountOfToValue()
-        print(countOfValue)
+
         for c in charSet:
             if c not in countOfValue or countOfValue[c] == 0:
                 miniQueue = [c] + miniQueue
