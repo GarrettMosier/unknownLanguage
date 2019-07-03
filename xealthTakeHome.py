@@ -7,7 +7,7 @@ wordIsAlpha = lambda x: all([c.isalpha() for c in x])
 
 
 def main():
-    f = open("data.txt", "r")
+    f = open("/usr/share/dict/words", "r")
     englishTestValues = [x.lower() for x in f.read().split("\n") if wordIsAlpha(x)]
     englishCharactersInLanguage = set("".join(englishTestValues))
 
