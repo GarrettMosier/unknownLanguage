@@ -22,13 +22,10 @@ class Graph:
         miniQueue = []
         result = []
 
-        print([k for (k,v) in self.mappings if v == 'c'])
-        
         countOfValue = self.getCountOfToValue() # inDegree
 
         for c in charSet:
             if c not in countOfValue or countOfValue[c] == 0:
-                print("starting char is " + str(c))
                 miniQueue = [c] + miniQueue
 
         while len(miniQueue) > 0:
@@ -39,8 +36,6 @@ class Graph:
                 countOfValue[neighbor] -= 1
                 if countOfValue[neighbor] == 0:
                     miniQueue = [neighbor] + miniQueue
-            print(countOfValue['c'])
-            print(self.getNeighbors(currentChar))
                 
         return result
 
@@ -63,7 +58,7 @@ def createOrderingRule(wordOne, wordTwo):
     # What happens if one is a larger word (i.e. dog and doge)?
     for (a, b) in zip(wordOne, wordTwo):
         if a != b:
-            if a == 'p' and b == 'c':
+            if a == 'g' and b == 'a':
                 print (wordOne + " "  + wordTwo)
             return (a, b)
     return (None, None)
