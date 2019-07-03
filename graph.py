@@ -19,9 +19,8 @@ class Graph:
     def toTotalOrder(self, charSet):
         miniQueue = []
         result = []
-
         countOfValue = self.getCountOfToValue() # inDegree
-
+        
         for c in charSet:
             if c not in countOfValue or countOfValue[c] == 0:
                 miniQueue = [c] + miniQueue
@@ -56,8 +55,6 @@ def createOrderingRule(wordOne, wordTwo):
     # What happens if one is a larger word (i.e. dog and doge)?
     for (a, b) in zip(wordOne, wordTwo):
         if a != b:
-            if a == 'g' and b == 'a':
-                print (wordOne + " "  + wordTwo)
             return (a, b)
     return (None, None)
 

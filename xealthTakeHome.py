@@ -8,15 +8,21 @@ wordIsAlpha = lambda x: all([c.isalpha() for c in x])
 
 
 def main():
-    # Not currently working with English dictionaries since they seem to have certain values out of place like words with 'g' before 'a'
-    f = open("/usr/share/dict/words", "r")
+    f = open("data.txt", "r") # Taken from https://www.mit.edu/~ecprice/wordlist.10000
     englishTestValues = [x.lower() for x in f.read().split("\n") if wordIsAlpha(x)]
     englishCharactersInLanguage = set("".join(englishTestValues))
-
+    englishTestResult = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
     
+    languageGraph = createWordOrdering(englishTestValues)
+    languageOrder = languageGraph.toTotalOrder(englishCharactersInLanguage)
+
+    print("The order of this language is " + str(languageOrder))
+    assert(englishTestResult == languageOrder)
+
     languageGraph = createWordOrdering(simpleTestValues)
     languageOrder = languageGraph.toTotalOrder(charactersInSimpleLanguage)
+
     
     print("The order of this language is " + str(languageOrder))
     assert(simpleTestResult == languageOrder)
