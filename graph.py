@@ -1,5 +1,36 @@
-getNeighbors = lambda mappings, c: [value for (key, value) in mappings if c == key]
-getValueCount = lambda mappings: {key:len(getNeighbors(mappings, key)) for (key, value) in mappings}
+class Graph:
+    def __init__(self, mappings):
+        self.mappings = mappings
+
+        
+    def getNeighbors(self, c):
+        return [value for (key, value) in self.mappings if c == key]
+
+    
+    def getValueCount(self):
+        return {key:len(self.getNeighbors(key)) for (key, value) in self.mappings}
+
+    # Taken from a topographical search algorithm
+    def wordOrderingToTotalOrder(self, charSet): #, start, result=[]
+        miniQueue = []
+        result = []
+
+        countOfKey = self.getValueCount()
+        
+        for c in charSet:
+            if c not in countOfKey or countOfKey[c] == 0:
+                miniQueue = [c] + miniQueue
+
+        while len(miniQueue) > 0:
+            currentChar = miniQueue.pop()
+            result.append(currentChar)
+
+            for neighbor in self.getNeighbors(currentChar):
+                countOfKey[c] -= 1
+                if countOfKey[c] == 0:
+                    miniQueue = [c] + miniQueue
+                
+        return result
 
 
 # Creates the global ordering for all characters
@@ -9,8 +40,6 @@ def createWordOrdering(words):
     # TODO remove duplicate checks for if value is None
     return filter(lambda x: x, set([createOrderingRule(a,b) for (a,b) in wordPairs if (a, b) and a.isalpha() and b.isalpha()]))
 
-
-wordIsAlpha = lambda x: all([c.isalpha() for c in x])
 
 # Requires at least two elements
 # Creates tuples for each word and the next word in the dictionary
@@ -27,29 +56,4 @@ def createOrderingRule(wordOne, wordTwo):
             return (a, b)
     return None
 
-        
-
-
-
-
-
-# Taken from a topographical search algorithm
-def wordOrderingToTotalOrder(wordOrdering, charSet, countOfKey): #, start, result=[]
-    miniQueue = []
-    result = []
-    
-    for c in charSet:
-        if c not in countOfKey or countOfKey[c] == 0:
-            miniQueue = [c] + miniQueue
-
-    while len(miniQueue) > 0:
-        currentChar = miniQueue.pop()
-        result.append(currentChar)
-
-        for neighbor in getNeighbors(wordOrdering, currentChar):
-            countOfKey[c] -= 1
-            if countOfKey[c] == 0:
-                miniQueue = [c] + miniQueue
-            
-    return result
-
+  

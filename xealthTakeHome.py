@@ -3,6 +3,7 @@ from graph import *
 simpleTestValues = ["bac", "aaa", "acb", "f"]
 simpleTestResult = ["b", "a", "c", "f"]
 
+wordIsAlpha = lambda x: all([c.isalpha() for c in x])
 
 
 def main():
@@ -11,12 +12,11 @@ def main():
     englishCharactersInLanguage = set("".join(englishTestValues))
 
     mappings = list(createWordOrdering(englishTestValues)) # Parsing wasn't working when had as set. Change later to be order independent
-    
-    #print(mappings)
-    countOfKey = getValueCount(mappings)
-    print(countOfKey) 
 
-    languageOrder = wordOrderingToTotalOrder(list(createWordOrdering(englishTestValues)), englishCharactersInLanguage, countOfKey)
+    g = Graph(mappings)
+    
+    languageOrder = g.wordOrderingToTotalOrder(englishCharactersInLanguage)
+    
     print(languageOrder)
 
 
