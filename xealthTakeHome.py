@@ -1,6 +1,6 @@
-testValues = ["bac", "aaa", "acb", "f"]
-testResult = ["b", "a", "c", "f"]
-# TODO Use real english dictionary to test
+simpleTestValues = ["bac", "aaa", "acb", "f"]
+simpleTestResult = ["b", "a", "c", "f"]
+
 
 # Requires at least two elements
 # Creates tuples for each word and the next word in the dictionary
@@ -16,8 +16,6 @@ def createOrderingRule(wordOne, wordTwo):
         if a != b:
             return (a, b)
     return None
-    #print(a)
-    #print(b)
 
         
 # Creates the global ordering for all characters
@@ -32,27 +30,56 @@ wordIsAlpha = lambda x: all([c.isalpha() for c in x])
 
 
 # Taken from a topographical search algorithm
-def wordOrderingToTotalOrder(wordOrdering, start, result=[]):
+def wordOrderingToTotalOrder(wordOrdering, charSet, countOfKey): #, start, result=[]
+    miniQueue = []
+    result = []
+    
+    for c in charSet:
+        if c not in countOfKey or countOfKey[c] == 0:
+            miniQueue = [c] + miniQueue
+
+    while len(miniQueue) > 0:
+        currentChar = miniQueue.pop()
+        result.append(currentChar)
+
+        for neighbor in getNeighbors(wordOrdering, currentChar):
+            countOfKey[c] -= 1
+            if countOfKey[c] == 0:
+                miniQueue = [c] + miniQueue
+            
+    return result
+
+
+
+
+
+"""
+    
     result = result + [start]
 
     for mapping in [x for x in wordOrdering if x[0] == start]:
         if mapping[1] not in result:
             result = wordOrderingToTotalOrder(wordOrdering, mapping[1], result)
     return result
-            
-        
+"""
+
+getNeighbors = lambda mappings, c: [value for (key, value) in mappings if c == key]
+getValueCount = lambda mappings: {key:len(getNeighbors(mappings, key)) for (key, value) in mappings}
+
 
 def main():
     f = open("data.txt", "r")
-    testValues = [x.lower() for x in f.read().split("\n") if wordIsAlpha(x)]
-    charactersInLanguage = set("".join(testValues))
-    print(charactersInLanguage)
-    print(len(charactersInLanguage))
-    # TODO Ignore case
-    #print(testValues)
-    print(list(createWordOrdering(testValues)))
+    englishTestValues = [x.lower() for x in f.read().split("\n") if wordIsAlpha(x)]
+    englishCharactersInLanguage = set("".join(englishTestValues))
 
-    print(wordOrderingToTotalOrder(list(createWordOrdering(testValues)), start=testValues[0][0]))
+    mappings = list(createWordOrdering(englishTestValues)) # Parsing wasn't working when had as set. Change later to be order independent
+    
+    #print(mappings)
+    countOfKey = getValueCount(mappings)
+    print(countOfKey) 
+
+    languageOrder = wordOrderingToTotalOrder(list(createWordOrdering(englishTestValues)), englishCharactersInLanguage, countOfKey)
+    print(languageOrder)
 
 
 main()
