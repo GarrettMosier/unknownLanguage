@@ -20,13 +20,15 @@ def createOrderingRule(wordOne, wordTwo):
 # Creates the global ordering for all characters
 def createWordOrdering(words):
     wordPairs = zipTail(words)
-    return set([createOrderingRule(a,b) for (a,b) in wordPairs])
+    # TODO remove duplicate checks for if value is None
+    return filter(lambda x: x, set([createOrderingRule(a,b) for (a,b) in wordPairs if (a, b) and a.isalpha() and b.isalpha()]))
 
 
 def main():
     f = open("data.txt", "r")
-    testValues = f.read().split("\n")
+    testValues = [x.lower() for x in f.read().split("\n")]
+    # TODO Ignore case
     #print(testValues)
-    print(createWordOrdering(testValues))
+    print(list(createWordOrdering(testValues)))
 
 main()
