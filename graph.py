@@ -3,22 +3,25 @@ class Graph:
         self.mappings = mappings
 
         
+    # Find all immediate descendents for a given node    
     def getNeighbors(self, c):
         return [value for (key, value) in self.mappings if c == key]
 
-    
-    def getValueCount(self):
-        return {key:len(self.getNeighbors(key)) for (key, value) in self.mappings}
 
+    # Find out how main pointers there are to the given node
+    def getCountOfToValue(self):
+        return {key:len([pair for pair in self.mappings if pair[1] == value]) for (key, value) in self.mappings}
+
+    
     # Taken from a topographical search algorithm
-    def wordOrderingToTotalOrder(self, charSet): #, start, result=[]
+    def toTotalOrder(self, charSet): #, start, result=[]
         miniQueue = []
         result = []
 
-        countOfKey = self.getValueCount()
-        
+        countOfValue = self.getCountOfToValue()
+        print(countOfValue['a'])
         for c in charSet:
-            if c not in countOfKey or countOfKey[c] == 0:
+            if c not in countOfValue or countOfValue[c] == 0:
                 miniQueue = [c] + miniQueue
 
         while len(miniQueue) > 0:
@@ -26,19 +29,17 @@ class Graph:
             result.append(currentChar)
 
             for neighbor in self.getNeighbors(currentChar):
-                countOfKey[c] -= 1
-                if countOfKey[c] == 0:
+                countOfValue[c] -= 1
+                if countOfValue[c] == 0:
                     miniQueue = [c] + miniQueue
                 
         return result
 
 
-# Creates the global ordering for all characters
-# End result should be a directed acyclic graph (DAG)
+# Graph factory method converting ordered list of words into a DAG
 def createWordOrdering(words):
     wordPairs = zipTail(words)
-    # TODO remove duplicate checks for if value is None
-    return filter(lambda x: x, set([createOrderingRule(a,b) for (a,b) in wordPairs if (a, b) and a.isalpha() and b.isalpha()]))
+    return Graph(set(filter(lambda x: x and x != (None, None), [createOrderingRule(pair[0], pair[1]) for pair in wordPairs])))
 
 
 # Requires at least two elements
@@ -54,6 +55,6 @@ def createOrderingRule(wordOne, wordTwo):
     for (a, b) in zip(wordOne, wordTwo):
         if a != b:
             return (a, b)
-    return None
+    return (None, None)
 
   
