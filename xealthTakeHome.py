@@ -13,6 +13,8 @@ def main():
     englishTestValues = [x.lower() for x in f.read().split("\n") if wordIsAlpha(x)]
     englishCharactersInLanguage = set("".join(englishTestValues))
 
+
+    
     languageGraph = createWordOrdering(simpleTestValues)
     languageOrder = languageGraph.toTotalOrder(charactersInSimpleLanguage)
     

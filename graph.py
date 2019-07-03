@@ -10,8 +10,6 @@ class Graph:
 
     # Find out how main pointers there are to the given node
     def getCountOfToValue(self):
-        # TODO Only returning a set of size 1. No idea why. Fucking filter type!
-
         valueMap = {value : len({k for (k, v) in self.mappings if v == value}) for (key, value) in self.mappings}
         return valueMap
 
