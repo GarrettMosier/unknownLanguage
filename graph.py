@@ -17,7 +17,7 @@ class Graph:
 
     
     # Taken from a topographical search algorithm
-    def toTotalOrder(self, charSet): #, start, result=[]
+    def toTotalOrder(self, charSet):
         miniQueue = []
         result = []
 
@@ -25,6 +25,7 @@ class Graph:
 
         for c in charSet:
             if c not in countOfValue or countOfValue[c] == 0:
+                print(c)
                 miniQueue = [c] + miniQueue
 
         while len(miniQueue) > 0:
