@@ -32,11 +32,14 @@ wordIsAlpha = lambda x: all([c.isalpha() for c in x])
 
 
 # Taken from a topographical search algorithm
-def wordOrderingToTotalOrder(wordOrdering, start):
-    queue = [start]
+def wordOrderingToTotalOrder(wordOrdering, start, result=[]):
+    result = result + [start]
 
-    while len(queue) > 0:
-        currentChar = queue.pop(0)
+    for mapping in [x for x in wordOrdering if x[0] == start]:
+        if mapping[1] not in result:
+            result = wordOrderingToTotalOrder(wordOrdering, mapping[1], result)
+    return result
+            
         
 
 def main():
@@ -48,5 +51,8 @@ def main():
     # TODO Ignore case
     #print(testValues)
     print(list(createWordOrdering(testValues)))
+
+    print(wordOrderingToTotalOrder(list(createWordOrdering(testValues)), start=testValues[0][0]))
+
 
 main()
